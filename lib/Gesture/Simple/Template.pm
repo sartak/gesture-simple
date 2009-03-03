@@ -16,13 +16,21 @@ sub match {
     my $self    = shift;
     my $gesture = shift;
 
-    my $score = 0;
+    my $score = $self->score_match($gesture);
 
     return $self->match_class->new(
         template => $self,
         gesture  => $gesture,
         score    => $score,
     );
+}
+
+sub score_match {
+    my $self    = shift;
+    my $gesture = shift;
+    my $score   = 50;
+
+    return $score;
 }
 
 __PACKAGE__->meta->make_immutable;
