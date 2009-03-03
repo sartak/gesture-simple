@@ -56,6 +56,20 @@ sub distance {
     return sqrt( ($a->[0] - $b->[0]) ** 2 + ($a->[1] - $b->[1]) ** 2 );
 }
 
+sub centroid {
+    my $self   = shift;
+    my $points = shift;
+
+    my ($X, $Y) = (0, 0);
+
+    for my $point (@$points) {
+        $X += $point->[0];
+        $Y += $point->[1];
+    }
+
+    return [ $X / @$points, $Y / @$points ];
+}
+
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
