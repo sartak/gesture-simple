@@ -100,8 +100,20 @@ sub rotate_by {
 sub scale_to_square {
     my $self   = shift;
     my $points = shift;
+    my $size   = shift || 100;
 
-    my ($min_x, $min_y, $max_x, $max_y) = $self->bounding_box($points);
+    my @new_points;
+
+    my ($width, $height) = $self->bounding_box($points);
+
+    for my $point (@$points) {
+        my $x = $point->[0] * ($size / $width);
+        my $y = $point->[1] * ($size / $height);
+
+        push @new_points, [$x, $y];
+    }
+
+    return \@new_points;
 }
 
 sub bounding_box {
@@ -109,7 +121,35 @@ sub bounding_box {
     my $points = shift;
 
     my ($min_x, $min_y, $max_x, $max_y) = (@{ $points->[0] }) x 2;
-    return ($min_x, $min_y, $max_x, $max_y);
+
+    for my $point (@$points) {
+        $min_x = $point->[0] if $point->[0] < $min_x;
+        $min_y = $point->[1] if $point->[1] < $min_y;
+
+        $max_x = $point->[0] if $point->[0] > $max_x;
+        $max_y = $point->[1] if $point->[1] > $max_y;
+    }
+
+    my $width  = ($max_x - $min_x) || 1;
+    my $height = ($max_y - $min_y) || 1;
+
+    return ($width, $height);
+}
+
+sub translate_to_origin {
+    my $self   = shift;
+    my $points = shift;
+
+    my $c = $self->centroid($points);
+    my @new_points;
+
+    for my $point (@$points) {
+        my $x = $point->[0] - $c->[0];
+        my $y = $point->[1] - $c->[1];
+        push @new_points, [$x + 50, $y + 50];
+    }
+
+    return \@new_points;
 }
 
 __PACKAGE__->meta->make_immutable;
