@@ -1,5 +1,6 @@
 package Gesture::Simple::Template;
 use Any::Moose;
+extends 'Gesture::Simple::Gesture';
 
 use Gesture::Simple::Match;
 
@@ -8,12 +9,6 @@ use constant match_class => 'Gesture::Simple::Match';
 has name => (
     is       => 'ro',
     isa      => 'Str',
-    required => 1,
-);
-
-has points => (
-    is       => 'ro',
-    isa      => 'ArrayRef',
     required => 1,
 );
 
