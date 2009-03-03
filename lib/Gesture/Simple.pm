@@ -1,7 +1,10 @@
 package Gesture::Simple;
 use Any::Moose;
 
+use Gesture::Simple::Gesture;
 use Gesture::Simple::Template;
+
+use constant gesture_class => 'Gesture::Simple::Gesture';
 
 has templates => (
     is         => 'ro',
@@ -24,6 +27,9 @@ sub add_template {
 sub match {
     my $self    = shift;
     my $gesture = shift;
+
+    $gesture = $self->gesture_class->new(points => $gesture)
+        if !blessed($gesture);
 
     my @matches = sort { $b->score <=> $a->score }
                   map { $_->match($gesture) }
