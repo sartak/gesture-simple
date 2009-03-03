@@ -1,6 +1,4 @@
-#!/usr/bin/env perl
-use strict;
-use warnings;
+package Gesture::Simple;
 use Any::Moose;
 
 has templates => (
@@ -16,4 +14,6 @@ sub add_template {
 
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
+
+1;
 
