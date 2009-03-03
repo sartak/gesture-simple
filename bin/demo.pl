@@ -40,6 +40,25 @@ sub draw_frame {
         $self->app->fill($rect, $green);
     }
 
+    for my $point (@{ $self->{resampled_gesture} || [] }) {
+        my ($x, $y) = @$point;
+
+        my $rect = SDL::Rect->new(
+            -height => 1,
+            -width  => 1,
+            -x      => $x,
+            -y      => $y,
+        );
+
+        my $red = SDL::Color->new(
+            -r => 0xFF,
+            -g => 0,
+            -b => 0,
+        );
+
+        $self->app->fill($rect, $red);
+    }
+
     my $screen_rect = SDL::Rect->new(
         -height => $self->height,
         -width  => $self->width,
@@ -62,6 +81,7 @@ sub begin_gesture {
     $self->{gesture} = [];
     $self->{is_gesturing} = 1;
     delete $self->{best_match};
+    delete $self->{resampled_gesture};
 
     # clear screen
     my $screen_rect = SDL::Rect->new(
@@ -94,6 +114,8 @@ sub end_gesture {
     $self->{is_gesturing} = 0;
 
     my $gesture = $self->{gesture};
+
+    $self->{resampled_gesture} = Gesture::Simple::Gesture->resample($self->{gesture});
 
     my $best_match = $self->{gesture_recognizer}->match($gesture);
     $self->{best_match} = $best_match->name;
