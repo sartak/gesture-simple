@@ -12,13 +12,13 @@ use constant resample_point_count => 64;
 sub resample {
     my $self   = shift;
     my @points = @{ shift || $self->points };
-    my @new_points;
+    my @new_points = $points[0];
 
     my $I = $self->path_length(\@points) / ($self->resample_point_count - 1);
     my $D = 0;
 
-    for (my $i = 0; $i < @points - 1; ++$i) {
-        my ($a, $b) = @points[$i, $i+1];
+    for (my $i = 1; $i < @points; ++$i) {
+        my ($a, $b) = @points[$i-1, $i];
         my $d = $self->distance($a, $b);
 
         if ($D + $d > $I) {
@@ -43,8 +43,8 @@ sub path_length {
     my $points = shift;
 
     my $length = 0;
-    for my $i (0 .. @$points - 2) {
-        my ($a, $b) = @{$points}[$i, $i+1];
+    for my $i (1 .. @$points - 1) {
+        my ($a, $b) = @{$points}[$i-1, $i];
         $length += $self->distance($a, $b);
     }
 
