@@ -25,8 +25,12 @@ sub match {
     my $self    = shift;
     my $gesture = shift;
 
-    my @matches = map { $_->match($gesture) } $self->templates;
-    return sort { $b->score <=> $a->score } @matches;
+    my @matches = sort { $b->score <=> $a->score }
+                  map { $_->match($gesture) }
+                  $self->templates;
+
+    return @matches if wantarray;
+    return $matches[0];
 }
 
 __PACKAGE__->meta->make_immutable;
