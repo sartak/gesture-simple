@@ -59,6 +59,25 @@ sub draw_frame {
         $self->app->fill($rect, $red);
     }
 
+    if ($self->{centroid}) {
+        my ($x, $y) = @{$self->{centroid}};
+
+        my $rect = SDL::Rect->new(
+            -height => 1,
+            -width  => 1,
+            -x      => $x,
+            -y      => $y,
+        );
+
+        my $blue = SDL::Color->new(
+            -r => 0,
+            -g => 0,
+            -b => 0xFF,
+        );
+
+        $self->app->fill($rect, $blue);
+    }
+
     my $screen_rect = SDL::Rect->new(
         -height => $self->height,
         -width  => $self->width,
@@ -82,6 +101,7 @@ sub begin_gesture {
     $self->{is_gesturing} = 1;
     delete $self->{best_match};
     delete $self->{resampled_gesture};
+    delete $self->{centroid};
 
     # clear screen
     my $screen_rect = SDL::Rect->new(
@@ -116,6 +136,7 @@ sub end_gesture {
     my $gesture = $self->{gesture};
 
     $self->{resampled_gesture} = Gesture::Simple::Gesture->resample($self->{gesture});
+    $self->{centroid} = Gesture::Simple::Gesture->centroid($self->{resampled_gesture});
 
     my $best_match = $self->{gesture_recognizer}->match($gesture);
     $self->{best_match} = $best_match->name;
