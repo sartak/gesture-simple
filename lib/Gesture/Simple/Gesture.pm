@@ -70,6 +70,33 @@ sub centroid {
     return [ $X / @$points, $Y / @$points ];
 }
 
+sub rotate_to_zero {
+    my $self   = shift;
+    my $points = shift;
+
+    my $c = $self->centroid($points);
+    my $theta = atan2($c->[1] - $points->[0][1], $c->[0] - $points->[0][0]);
+
+    return [ map { $self->rotate_by($c, $_, -$theta) } @$points ];
+}
+
+sub rotate_by {
+    my $self   = shift;
+    my $c      = shift;
+    my $point  = shift;
+    my $theta  = shift;
+
+    my $x = ($point->[0] - $c->[0]) * cos($theta)
+          - ($point->[1] - $c->[1]) * sin($theta)
+          + $c->[0];
+
+    my $y = ($point->[0] - $c->[0]) * sin($theta)
+          + ($point->[1] - $c->[1]) * cos($theta)
+          + $c->[1];
+
+    return [$x, $y];
+}
+
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
