@@ -97,6 +97,21 @@ sub rotate_by {
     return [$x, $y];
 }
 
+sub scale_to_square {
+    my $self   = shift;
+    my $points = shift;
+
+    my ($min_x, $min_y, $max_x, $max_y) = $self->bounding_box($points);
+}
+
+sub bounding_box {
+    my $self   = shift;
+    my $points = shift;
+
+    my ($min_x, $min_y, $max_x, $max_y) = (@{ $points->[0] }) x 2;
+    return ($min_x, $min_y, $max_x, $max_y);
+}
+
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
