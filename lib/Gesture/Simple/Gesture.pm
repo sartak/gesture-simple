@@ -53,7 +53,7 @@ sub path_length {
 
 sub distance {
     my (undef, $a, $b) = @_;
-    return sqrt( ($a->[0] + $b->[0]) ** 2 + ($a->[1] + $b->[1]) ** 2 );
+    return sqrt( ($a->[0] - $b->[0]) ** 2 + ($a->[1] - $b->[1]) ** 2 );
 }
 
 __PACKAGE__->meta->make_immutable;
