@@ -11,6 +11,7 @@ has template => (
     is       => 'ro',
     isa      => 'Gesture::Simple::Template',
     required => 1,
+    handles  => ['name'],
 );
 
 has score => (
