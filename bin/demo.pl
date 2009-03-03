@@ -143,8 +143,10 @@ sub end_gesture {
 
     $self->{latest_gesture} = $translated;
 
-    my $best_match = $self->{gesture_recognizer}->match($gesture);
-    #$self->{best_match} = $best_match->name;
+    if ($self->{gesture_recognizer}->has_templates) {
+        my $best_match = $self->{gesture_recognizer}->match($gesture);
+        $self->{best_match} = $best_match->name;
+    }
 }
 
 sub post_init_handler {

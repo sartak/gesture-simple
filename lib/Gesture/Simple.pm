@@ -13,6 +13,8 @@ has templates => (
     auto_deref => 1,
 );
 
+sub has_templates { @{ shift->templates } > 0 }
+
 sub add_template {
     my $self = shift;
 
@@ -27,6 +29,9 @@ sub add_template {
 sub match {
     my $self    = shift;
     my $gesture = shift;
+
+    confess "You have no templates to match against!"
+        unless $self->has_templates;
 
     $gesture = $self->gesture_class->new(points => $gesture)
         if !blessed($gesture);
