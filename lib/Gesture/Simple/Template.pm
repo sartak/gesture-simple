@@ -16,12 +16,15 @@ sub match {
     my $self    = shift;
     my $gesture = shift;
 
-    my $score = $self->score_match($gesture);
+    my $raw_score = $self->score_match($gesture);
+
+    # XXX: 100 -> $size
+    my $normalized_score = 1 - $raw_score / 0.5 * sqrt(100*2 + 100*2);
 
     return $self->match_class->new(
         template => $self,
         gesture  => $gesture,
-        score    => $score,
+        score    => $normalized_score,
     );
 }
 
