@@ -139,11 +139,12 @@ sub end_gesture {
     $self->{centroid} = Gesture::Simple::Gesture->centroid($resampled);
     my $rotated = Gesture::Simple::Gesture->rotate_to_zero($resampled);
     my $scaled = Gesture::Simple::Gesture->scale_to_square($rotated);
+    my $translated = Gesture::Simple::Gesture->translate_to_origin($scaled);
 
-    $self->{latest_gesture} = $rotated;
+    $self->{latest_gesture} = $translated;
 
     my $best_match = $self->{gesture_recognizer}->match($gesture);
-    $self->{best_match} = $best_match->name;
+    #$self->{best_match} = $best_match->name;
 }
 
 sub post_init_handler {
