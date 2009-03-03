@@ -14,11 +14,11 @@ sub resample {
     my @points = @{ shift || $self->points };
     my @new_points;
 
-    my $I = $self->path_length($points) / ($self->resample_point_count - 1);
+    my $I = $self->path_length(\@points) / ($self->resample_point_count - 1);
     my $D = 0;
 
-    for (my $i = 0; $i < @$points - 1; ++$i) {
-        my ($a, $b) = @{$points}[$i, $i+1];
+    for (my $i = 0; $i < @points - 1; ++$i) {
+        my ($a, $b) = @points[$i, $i+1];
         my $d = $self->distance($a, $b);
 
         if ($D + $d > $I) {
