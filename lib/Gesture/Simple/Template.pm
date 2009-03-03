@@ -21,8 +21,10 @@ sub match {
     my $self    = shift;
     my $gesture = shift;
 
+    my $score = 0;
+
     return $self->match_class->new(
-        template => $template,
+        template => $self,
         gesture  => $gesture,
         score    => $score,
     );
