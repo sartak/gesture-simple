@@ -95,8 +95,8 @@ sub end_gesture {
 
     my $gesture = $self->{gesture};
 
-    my @matches = $self->{gesture_recognizer}->match($gesture);
-    $self->{best_match} = $matches[0]->name;
+    my $best_match = $self->{gesture_recognizer}->match($gesture);
+    $self->{best_match} = $best_match->name;
 }
 
 sub post_init_handler {
