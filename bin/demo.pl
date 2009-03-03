@@ -21,25 +21,23 @@ use base 'SDL::App::FPS';
 sub draw_frame {
     my $self = shift;
 
-    if ($self->is_gesturing) {
-        for my $point (@{ $self->{gesture} }) {
-            my ($x, $y) = @$point;
+    for my $point (@{ $self->{gesture} }) {
+        my ($x, $y) = @$point;
 
-            my $rect = SDL::Rect->new(
-                -height => 1,
-                -width  => 1,
-                -x      => $x,
-                -y      => $y,
-            );
+        my $rect = SDL::Rect->new(
+            -height => 1,
+            -width  => 1,
+            -x      => $x,
+            -y      => $y,
+        );
 
-            my $green = SDL::Color->new(
-                -r => 0,
-                -g => 0xFF,
-                -b => 0,
-            );
+        my $green = SDL::Color->new(
+            -r => 0,
+            -g => 0xFF,
+            -b => 0,
+        );
 
-            $self->app->fill($rect, $green);
-        }
+        $self->app->fill($rect, $green);
     }
 
     my $screen_rect = SDL::Rect->new(
@@ -59,9 +57,13 @@ sub is_gesturing {
 
 sub begin_gesture {
     my $self = shift;
+
+    # update state
     $self->{gesture} = [];
     $self->{is_gesturing} = 1;
+    delete $self->{best_match};
 
+    # clear screen
     my $screen_rect = SDL::Rect->new(
         -height => $self->height,
         -width  => $self->width,
@@ -82,6 +84,7 @@ sub update_gesture {
     my $self = shift;
     return unless $self->is_gesturing;
 
+    # add the current point to our list of points for this gesture
     push @{ $self->{gesture} }, [@_];
 }
 
@@ -92,8 +95,8 @@ sub end_gesture {
 
     my $gesture = $self->{gesture};
 
-
     my @matches = $self->{gesture_recognizer}->match($gesture);
+    $self->{best_match} = $matches[0]->name;
 }
 
 sub post_init_handler {
