@@ -3,7 +3,7 @@ use Any::Moose;
 
 has gesture => (
     is       => 'ro',
-    isa      => 'ArrayRef',
+    isa      => 'Gesture::Simple::Gesture',
     required => 1,
 );
 
