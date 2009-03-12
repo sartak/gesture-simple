@@ -44,24 +44,24 @@ sub distance_at_best_angle {
     my $self    = shift;
     my $gesture = shift;
 
-    my $minimum = $self->minimum_angle;
-    my $maximum = $self->maximum_angle;
+    my $theta_a = $self->minimum_angle;
+    my $theta_b = $self->maximum_angle;
     my $threshold = $self->angle_threshold;
 
-    my $phi = 1.61803399; # golden ratio
+    my $phi = .61803399; # golden ratio
 
-    my $x1 = defer {      $phi  * $minimum + (1 - $phi) * $maximum };
-    my $x2 = defer { (1 - $phi) * $minimum +      $phi  * $maximum };
+    my $x1 = defer {      $phi  * $theta_a + (1 - $phi) * $theta_b };
+    my $x2 = defer { (1 - $phi) * $theta_a +      $phi  * $theta_b };
 
     my $f1 = defer { $self->distance_at_angle($gesture, force $x1) };
     my $f2 = defer { $self->distance_at_angle($gesture, force $x2) };
 
-    while (abs($maximum - $minimum) > $threshold) {
+    while (abs($theta_b - $theta_a) > $threshold) {
         if ($f1 < $f2) {
-            $maximum = force $x2;
+            $theta_b = force $x2;
         }
         else {
-            $minimum = force $x1;
+            $theta_a = force $x1;
         }
     }
 
