@@ -107,9 +107,9 @@ sub end_gesture {
     }
 
     if ($self->{best_match}) {
-        print "Best match: "
-            . $self->{best_match}->name
-            . " (" . $self->{best_match}->score . ")\n";
+        printf "Best match: %s (%.2f)\n",
+            $self->{best_match}->name,
+            $self->{best_match}->score;
     }
 
     if (!$self->{best_match} || $self->{best_match}->score < 75) {
