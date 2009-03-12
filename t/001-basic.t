@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Gesture::Simple;
-use Test::More tests => 6;
+use Test::More tests => 11;
 
 my $recognizer = Gesture::Simple->new;
 
@@ -74,8 +74,6 @@ my $gesture = Gesture::Simple::Gesture->new(
     ],
 );
 
-use DDS; warn Dump($template->resample);
-
 my $match = $recognizer->match($gesture);
 
 ok($match, 'got a match');
@@ -83,5 +81,76 @@ isa_ok($match, 'Gesture::Simple::Match', 'match class');
 is($match->template, $template, 'correct template');
 is($match->name, 'L', 'correct match name');
 is($match->gesture, $gesture, 'correct gesture');
-cmp_ok($match->score, '>', 95, 'the gesture matched very well');
+
+cmp_ok($match->score, '>', 90, 'the gesture matched very well');
+
+my $circle = Gesture::Simple::Template->new(
+    name => 'circle',
+    points => [
+        [ 152, 106 ],
+        [ 150, 106 ],
+        [ 149, 106 ],
+        [ 145, 106 ],
+        [ 142, 106 ],
+        [ 138, 106 ],
+        [ 133, 106 ],
+        [ 127, 107 ],
+        [ 122, 110 ],
+        [ 118, 113 ],
+        [ 114, 116 ],
+        [ 112, 118 ],
+        [ 111, 121 ],
+        [ 111, 125 ],
+        [ 111, 132 ],
+        [ 114, 138 ],
+        [ 118, 142 ],
+        [ 124, 148 ],
+        [ 131, 152 ],
+        [ 140, 155 ],
+        [ 146, 156 ],
+        [ 155, 157 ],
+        [ 162, 157 ],
+        [ 169, 157 ],
+        [ 177, 155 ],
+        [ 182, 152 ],
+        [ 186, 149 ],
+        [ 190, 146 ],
+        [ 193, 143 ],
+        [ 194, 141 ],
+        [ 195, 137 ],
+        [ 196, 133 ],
+        [ 196, 128 ],
+        [ 196, 125 ],
+        [ 196, 121 ],
+        [ 194, 120 ],
+        [ 192, 117 ],
+        [ 187, 115 ],
+        [ 183, 113 ],
+        [ 179, 112 ],
+        [ 175, 110 ],
+        [ 172, 109 ],
+        [ 168, 108 ],
+        [ 163, 107 ],
+        [ 159, 106 ],
+        [ 155, 105 ],
+        [ 152, 104 ],
+        [ 149, 103 ],
+        [ 147, 103 ],
+        [ 146, 103 ],
+        [ 145, 103 ],
+        [ 143, 103 ],
+    ],
+);
+
+$recognizer->add_template($circle);
+
+my @matches = $recognizer->match($gesture);
+
+is(@matches, 2, 'got two matches');
+
+is($matches[0]->name, 'L', 'correct best match');
+cmp_ok($matches[0]->score, '>', 90, 'the gesture matched very well');
+
+is($matches[1]->name, 'circle', 'correct worst match');
+cmp_ok($matches[1]->score, '<', 75, 'the gesture did not match well');
 
