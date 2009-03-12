@@ -34,7 +34,7 @@ sub resample {
         my ($a, $b) = @points[$i-1, $i];
         my $d = $self->distance($a, $b);
 
-        if ($D + $d > $I) {
+        if ($D + $d >= $I) {
             my $q_x = $a->[0] + (($I - $D) / $d) * ($b->[0] - $a->[0]);
             my $q_y = $a->[1] + (($I - $D) / $d) * ($b->[1] - $a->[1]);
             my $q = [$q_x, $q_y];
