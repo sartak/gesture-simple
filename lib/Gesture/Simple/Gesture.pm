@@ -7,6 +7,19 @@ has points => (
     required => 1,
 );
 
+sub _set_points { $_[0]->{points} = $_[1] }
+
+sub BUILD {
+    my $self = shift;
+
+    my $resampled = $self->resample;
+    my $rotated = $self->rotate_to_zero($resampled);
+    my $scaled = $self->scale_to_square($rotated);
+    my $translated = $self->translate_to_origin($scaled);
+
+    $self->_set_points($translated);
+}
+
 use constant resample_point_count => 64;
 
 sub resample {
