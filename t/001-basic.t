@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Gesture::Simple;
-use Test::More tests => 11;
+use Test::More tests => 21;
 
 my $recognizer = Gesture::Simple->new;
 
@@ -152,5 +152,27 @@ is($matches[0]->name, 'L', 'correct best match');
 cmp_ok($matches[0]->score, '>', 90, 'the gesture matched very well');
 
 is($matches[1]->name, 'circle', 'correct worst match');
+cmp_ok($matches[1]->score, '<', 75, 'the gesture did not match well');
+
+
+@matches = $recognizer->match($template);
+
+is(@matches, 2, 'got two matches');
+
+is($matches[0]->name, 'L', 'correct best match');
+cmp_ok($matches[0]->score, '>', 90, 'the gesture matched very well');
+
+is($matches[1]->name, 'circle', 'correct worst match');
+cmp_ok($matches[1]->score, '<', 75, 'the gesture did not match well');
+
+
+@matches = $recognizer->match($circle);
+
+is(@matches, 2, 'got two matches');
+
+is($matches[0]->name, 'circle', 'correct best match');
+cmp_ok($matches[0]->score, '>', 90, 'the gesture matched very well');
+
+is($matches[1]->name, 'L', 'correct worst match');
 cmp_ok($matches[1]->score, '<', 75, 'the gesture did not match well');
 
