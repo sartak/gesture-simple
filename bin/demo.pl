@@ -40,44 +40,6 @@ sub draw_frame {
         $self->app->fill($rect, $green);
     }
 
-    for my $point (@{ $self->{latest_gesture} || [] }) {
-        my ($x, $y) = @$point;
-
-        my $rect = SDL::Rect->new(
-            -height => 1,
-            -width  => 1,
-            -x      => $x,
-            -y      => $y,
-        );
-
-        my $red = SDL::Color->new(
-            -r => 0xFF,
-            -g => 0,
-            -b => 0,
-        );
-
-        $self->app->fill($rect, $red);
-    }
-
-    if ($self->{centroid}) {
-        my ($x, $y) = @{$self->{centroid}};
-
-        my $rect = SDL::Rect->new(
-            -height => 1,
-            -width  => 1,
-            -x      => $x,
-            -y      => $y,
-        );
-
-        my $blue = SDL::Color->new(
-            -r => 0,
-            -g => 0,
-            -b => 0xFF,
-        );
-
-        $self->app->fill($rect, $blue);
-    }
-
     my $screen_rect = SDL::Rect->new(
         -height => $self->height,
         -width  => $self->width,
@@ -135,17 +97,31 @@ sub end_gesture {
 
     my $gesture = $self->{gesture};
 
-    my $resampled = Gesture::Simple::Gesture->resample($self->{gesture});
-    $self->{centroid} = Gesture::Simple::Gesture->centroid($resampled);
-    my $rotated = Gesture::Simple::Gesture->rotate_to_zero($resampled);
-    my $scaled = Gesture::Simple::Gesture->scale_to_square($rotated);
-    my $translated = Gesture::Simple::Gesture->translate_to_origin($scaled);
-
-    $self->{latest_gesture} = $translated;
+    $self->{latest_gesture} = Gesture::Simple::Gesture->new(points => $self->{gesture});
 
     if ($self->{gesture_recognizer}->has_templates) {
-        my $best_match = $self->{gesture_recognizer}->match($gesture);
-        $self->{best_match} = $best_match->name;
+        $self->{best_match} = $self->{gesture_recognizer}->match($gesture);
+    }
+    else {
+        delete $self->{best_match};
+    }
+
+    if ($self->{best_match}) {
+        print "Best match: "
+            . $self->{best_match}->name
+            . " (" . $self->{best_match}->score . ")\n";
+    }
+
+    if (!$self->{best_match} || $self->{best_match}->score < 75) {
+        my $name = "G" . (@{ $self->{gesture_recognizer}->templates } + 1);
+        my $template = Gesture::Simple::Template->new(
+            points => $self->{latest_gesture}->points,
+            name   => $name,
+        );
+
+        print "Adding as $name.\n";
+
+        $self->{gesture_recognizer}->add_template($template);
     }
 }
 
