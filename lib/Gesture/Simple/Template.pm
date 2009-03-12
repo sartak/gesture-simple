@@ -35,7 +35,6 @@ sub score_match {
     return $score * 100;
 }
 
-# these are specified in radians
 use constant minimum_angle   => -0.785398163; # -45 degrees
 use constant maximum_angle   =>  0.785398163; # 45 degrees
 use constant angle_threshold => 0.034906585;  # 2 degrees
