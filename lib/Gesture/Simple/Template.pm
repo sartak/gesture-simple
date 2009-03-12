@@ -89,14 +89,15 @@ sub path_distance {
     my $points = shift;
     my $template = $self->points;
 
-    my $d = 0;
+    my $distance = 0;
 
     for (my $i = 0; $i < @$template; ++$i) {
-        next unless $template->[$i] && $points->[$i];
-        $d += $self->distance($template->[$i], $points->[$i]);
+        my $d = $self->distance($template->[$i], $points->[$i]);
+        $distance += $d;
     }
 
-    my $distance = $d / @$template;
+    $distance /= @$template;
+
     return $distance;
 }
 
