@@ -1,6 +1,7 @@
 package Gesture::Simple::Template;
 use Any::Moose;
 extends 'Gesture::Simple::Gesture';
+use Scalar::Defer 'defer';
 
 use Gesture::Simple::Match;
 
@@ -49,26 +50,18 @@ sub distance_at_best_angle {
 
     my $phi = 1.61803399; # golden ratio
 
-    my $x1 =      $phi  * $minimum + (1 - $phi) * $maximum;
-    my $x2 = (1 - $phi) * $minimum +      $phi  * $maximum;
+    my $x1 = defer {      $phi  * $minimum + (1 - $phi) * $maximum };
+    my $x2 = defer { (1 - $phi) * $minimum +      $phi  * $maximum };
 
-    my $f1 = $self->distance_at_angle($gesture, $x1);
-    my $f2 = $self->distance_at_angle($gesture, $x2);
+    my $f1 = defer { $self->distance_at_angle($gesture, $x1) };
+    my $f2 = defer { $self->distance_at_angle($gesture, $x2) };
 
-    while ($maximum - $minimum > $threshold) {
+    while (abs($maximum - $minimum) > $threshold) {
         if ($f1 < $f2) {
-            $maximum = $x2;
-            $x2 = $x1;
-            $f2 = $f1;
-            $x1 = $phi * $minimum + (1 - $phi) * $maximum;
-            $f1 = $self->distance_at_angle($gesture, $x1);
+            $maximum = 0 + $x2;
         }
         else {
-            $minimum = $x1;
-            $x1 = $x2;
-            $f1 = $f2;
-            $x2 = (1 - $phi) * $minimum + $phi * $maximum;
-            $f2 = $self->distance_at_angle($gesture, $x2);
+            $minimum = 0 + $x1;
         }
     }
 
