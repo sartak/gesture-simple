@@ -90,24 +90,31 @@ sub rotate_to_zero {
     my $c = $self->centroid($points);
     my $theta = atan2($c->[1] - $points->[0][1], $c->[0] - $points->[0][0]);
 
-    return [ map { $self->rotate_by($c, $_, -$theta) } @$points ];
+    return $self->rotate_by($points, -$theta);
 }
 
 sub rotate_by {
-    my $self   = shift;
-    my $c      = shift;
-    my $point  = shift;
-    my $theta  = shift;
+    my $self    = shift;
+    my $points  = shift;
+    my $theta   = shift;
 
-    my $x = ($point->[0] - $c->[0]) * cos($theta)
-          - ($point->[1] - $c->[1]) * sin($theta)
-          + $c->[0];
+    my $c = $self->centroid($points);
 
-    my $y = ($point->[0] - $c->[0]) * sin($theta)
-          + ($point->[1] - $c->[1]) * cos($theta)
-          + $c->[1];
+    my @new_points;
 
-    return [$x, $y];
+    for my $point (@$points) {
+        my $x = ($point->[0] - $c->[0]) * cos($theta)
+              - ($point->[1] - $c->[1]) * sin($theta)
+              + $c->[0];
+
+        my $y = ($point->[0] - $c->[0]) * sin($theta)
+              + ($point->[1] - $c->[1]) * cos($theta)
+              + $c->[1];
+
+        push @new_points, [$x, $y];
+    }
+
+    return \@new_points;
 }
 
 sub scale_to_square {
