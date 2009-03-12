@@ -53,8 +53,8 @@ sub distance_at_best_angle {
     my $x1 = defer {      $phi  * $minimum + (1 - $phi) * $maximum };
     my $x2 = defer { (1 - $phi) * $minimum +      $phi  * $maximum };
 
-    my $f1 = defer { $self->distance_at_angle($gesture, $x1) };
-    my $f2 = defer { $self->distance_at_angle($gesture, $x2) };
+    my $f1 = defer { $self->distance_at_angle($gesture, 0 + $x1) };
+    my $f2 = defer { $self->distance_at_angle($gesture, 0 + $x2) };
 
     while (abs($maximum - $minimum) > $threshold) {
         if ($f1 < $f2) {
