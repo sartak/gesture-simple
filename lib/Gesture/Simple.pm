@@ -4,6 +4,8 @@ use Any::Moose;
 use Gesture::Simple::Gesture;
 use Gesture::Simple::Template;
 
+our $VERSION = '0.01';
+
 use constant gesture_class => 'Gesture::Simple::Gesture';
 
 has templates => (
