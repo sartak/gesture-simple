@@ -1,5 +1,6 @@
 package Gesture::Simple;
 use Any::Moose;
+use 5.008001;
 
 use Gesture::Simple::Gesture;
 use Gesture::Simple::Template;
