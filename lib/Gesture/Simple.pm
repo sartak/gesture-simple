@@ -72,8 +72,10 @@ Gesture::Simple - the $1 (mouse) gesture recognizer
     }
     else {
         $recognizer->add_template(
-            points => \@points,
-            name   => readline(),
+            Gesture::Simple::Template->new(
+                points => \@points,
+                name   => readline(),
+            ),
         );
     }
 
@@ -87,9 +89,11 @@ This module is alpha quality. Use it at your own risk.
 
 =head1 SEE ALSO
 
-L<http://faculty.washington.edu/wobbrock/pubs/uist-07.1.pdf> - Paper describing the algorithm
+L<http://faculty.washington.edu/wobbrock/pubs/uist-07.1.pdf> - Paper describing
+the algorithm
 
-L<http://depts.washington.edu/aimgroup/proj/dollar/> - Javascript example of the algorithm
+L<http://depts.washington.edu/aimgroup/proj/dollar/> - Javascript example of
+the algorithm
 
 =head1 COPYRIGHT AND LICENSE
 
