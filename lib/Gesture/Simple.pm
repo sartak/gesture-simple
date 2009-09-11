@@ -87,7 +87,9 @@ This module is alpha quality. Use it at your own risk.
 
 =head1 SEE ALSO
 
-L<http://faculty.washington.edu/wobbrock/pubs/uist-07.1.pdf>
+L<http://faculty.washington.edu/wobbrock/pubs/uist-07.1.pdf> - Paper describing the algorithm
+
+L<http://depts.washington.edu/aimgroup/proj/dollar/> - Javascript example of the algorithm
 
 =head1 COPYRIGHT AND LICENSE
 
