@@ -57,9 +57,33 @@ __END__
 
 Gesture::Simple - the $1 (mouse) gesture recognizer
 
+=head1 SYNOPSIS
+
+    my $recognizer = Gesture::Simple->new;
+
+    my @points = read_mouse_coordinates();
+    my $gesture = Gesture::Simple::Gesture->new(
+        points => \@points,
+    );
+
+    my $match = $recognizer->match($gesture);
+    if ($match) {
+        print $match->template->name;
+    }
+    else {
+        $recognizer->add_template(
+            points => \@points,
+            name   => readline(),
+        );
+    }
+
 =head1 AUTHOR
 
 Shawn M Moore, C<sartak@gmail.com>
+
+=head1 WARNING
+
+This module is alpha quality. Use it at your own risk.
 
 =head1 SEE ALSO
 
