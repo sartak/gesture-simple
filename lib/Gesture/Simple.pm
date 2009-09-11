@@ -61,6 +61,10 @@ Gesture::Simple - the $1 (mouse) gesture recognizer
 
 Shawn M Moore, C<sartak@gmail.com>
 
+=head1 SEE ALSO
+
+L<http://faculty.washington.edu/wobbrock/pubs/uist-07.1.pdf>
+
 =head1 COPYRIGHT AND LICENSE
 
 Copyright 2009 Shawn M Moore.
